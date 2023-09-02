@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>OBXD Midi CC Controller</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+
+<body>
+    <h1>OBXD MIDI CC Controller</h1>
+    
+    <div>
+        <label for="transponse">CC3 (Transponse):</label>
+        <input type="range" id="transponse" min="0" max="127" value="64">
+    </div>
+
+    <div>
+        <label for="tune">CC9 (Tune):</label>
+        <input type="range" id="tune" min="0" max="127" value="64">
+    </div>
+
+    <div>
+        <label for="cutoff">CC74 (Cutoff):</label>
+        <input type="range" id="cutoff" min="0" max="127" value="64">
+    </div>
+
+    <div>
+        <label for="resonance">CC42 (Resonance):</label>
+        <input type="range" id="resonance" min="0" max="127" value="64">
+    </div>
+
+    <div>
+        <label for="midi-output-select">Seleccionar dispositivo de salida MIDI:</label>
+        <select id="midi-output-select"></select>
+    </div>
+
+    <script src="midi_controller.js"></script>
+</body>
+
+</html>

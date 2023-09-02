@@ -1,0 +1,24 @@
+En el estándar MIDI, los canales MIDI están numerados del 1 al 16, pero internamente se representan en el rango de 0 a 15. Entonces, para generar un mensaje de Control Change (CC) en un canal específico, debes asignarle el valor del canal menos 1 al segundo elemento del mensaje, que normalmente es el número de canal.
+
+Por ejemplo:
+
+Para el canal MIDI 1, el valor del segundo elemento sería 0.
+Para el canal MIDI 2, el valor del segundo elemento sería 1.
+Para el canal MIDI 3, el valor del segundo elemento sería 2.
+Y así sucesivamente hasta el canal MIDI 16, donde el valor sería 15.
+Aquí hay ejemplos de cómo crear mensajes de CC para diferentes canales MIDI:
+
+javascript
+Copy code
+// Mensaje de CC en el canal MIDI 1
+const ccMessageChannel1 = [0xB0, ccNumber, ccValue];
+
+// Mensaje de CC en el canal MIDI 2
+const ccMessageChannel2 = [0xB1, ccNumber, ccValue];
+
+// Mensaje de CC en el canal MIDI 3
+const ccMessageChannel3 = [0xB2, ccNumber, ccValue];
+
+// Mensaje de CC en el canal MIDI 16
+const ccMessageChannel16 = [0xBF, ccNumber, ccValue];
+Recuerda que estos valores de canal están en hexadecimal, por lo que 0x0B representa el canal 1, 0x0C representa el canal 2 y así sucesivamente hasta 0x1F que representa el canal 16.
