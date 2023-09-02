@@ -3,7 +3,7 @@
 
 # Authors, Professors:
 * ISFT151: 
-    -Ferreira, Gabriel. 
-    -Machado, Sandra.
-    -Oemig, José Luis.
-    -Santiago, Matías.
+    - Ferreira, Gabriel. 
+    - Machado, Sandra.
+    - Oemig, José Luis.
+    - Santiago, Matías.
