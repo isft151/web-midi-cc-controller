@@ -4,11 +4,12 @@
 * https://opensource.org/licenses/MIT
 **/
 
-// Acceder a los elementos HTML
-const transponse = document.getElementById('transponse');
-const tune = document.getElementById('tune');
-const cutoff = document.getElementById('cutoff');
-const resonance = document.getElementById('resonance');
+//HTML Elements access.
+const ASPLAYEDALLOCATION = document.getElementById('ASPLAYEDALLOCATION');
+const BANDPASS = document.getElementById('BANDPASS');
+const BENDLFORATE = document.getElementById('BENDLFORATE');
+const BENDOSC2 = document.getElementById('BENDOSC2');
+const BENDRANGE = document.getElementById('BENDRANGE');
 const outputSelect = document.getElementById('midi-output-select');
 
 // Función para enviar el mensaje CC al dispositivo seleccionado
@@ -26,24 +27,30 @@ function sendCCMessage(ccNumber, ccValue) {
         });
 }
 
-// Manejar el cambio de valor del slider CC3 VCO1 transpose
-transponse.addEventListener('input', () => {
-    sendCCMessage(3, transponse.value);
+/**Inputs event listeners: */
+//ASPLAYEDALLOCATION
+ASPLAYEDALLOCATION.addEventListener('input', () => {
+    sendCCMessage(21, ASPLAYEDALLOCATION.value);
 });
 
-// Manejar el cambio de valor del slider CC9 VCO1 tune
-tune.addEventListener('input', () => {
-    sendCCMessage(9, transponse.value);
+//BANDPASS
+BANDPASS.addEventListener('input', () => {
+    sendCCMessage(105, BANDPASS.value);
 });
 
-// Manejar el cambio de valor del slider CC74 Cutoff
-cutoff.addEventListener('input', () => {
-    sendCCMessage(74, cutoff.value);
+//BENDLFORATE
+BENDLFORATE.addEventListener('input', () => {
+    sendCCMessage(75, BENDLFORATE.value);
 });
 
-// Manejar el cambio de valor del slider CC71 Resonance
-resonance.addEventListener('input', () => {
-    sendCCMessage(42, resonance.value);
+//BENDOSC2
+BENDOSC2.addEventListener('input', () => {
+    sendCCMessage(34, BENDOSC2.value);
+});
+
+//BENDRANGE
+BENDRANGE.addEventListener('input', () => {
+    sendCCMessage(118, BENDRANGE.value);
 });
 
 // Obtener los dispositivos MIDI de salida disponibles y agregarlos al select
