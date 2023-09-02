@@ -10,6 +10,7 @@ const BANDPASS = document.getElementById('BANDPASS');
 const BENDLFORATE = document.getElementById('BENDLFORATE');
 const BENDOSC2 = document.getElementById('BENDOSC2');
 const BENDRANGE = document.getElementById('BENDRANGE');
+const BRIGHTNESS = document.getElementById('BRIGHTNESS');
 const outputSelect = document.getElementById('midi-output-select');
 
 // Función para enviar el mensaje CC al dispositivo seleccionado
@@ -51,6 +52,11 @@ BENDOSC2.addEventListener('input', () => {
 //BENDRANGE
 BENDRANGE.addEventListener('input', () => {
     sendCCMessage(118, BENDRANGE.value);
+});
+
+//BRIGHTNESS
+BRIGHTNESS.addEventListener('input', () => {
+    sendCCMessage(62, BRIGHTNESS.value);
 });
 
 // Obtener los dispositivos MIDI de salida disponibles y agregarlos al select

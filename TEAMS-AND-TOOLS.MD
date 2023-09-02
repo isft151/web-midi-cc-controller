@@ -6,6 +6,10 @@
             - http://w3.unpocodetodo.info/css3/input-type-range.php
             - https://elcssar.com/html5/input-type-range-slider-bar
 
+* BACKEND: 
+    - Desarrollo de MIDI Controller.
+        - Se requiere pasar todos los MIDI CC del OBXD
+
 * INFRAESTRUCTURA:
     - Servidor HTTPS.
     
