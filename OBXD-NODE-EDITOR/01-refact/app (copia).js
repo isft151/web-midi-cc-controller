@@ -43,7 +43,7 @@ wss.on('connection', (ws) => {
 // Función para enviar un mensaje MIDI CC
 function sendMidiCC(ccNumber, ccValue, midiDevice) {
     const output = new easymidi.Output(midiDevice);
-
+    console.log(midiDevice);
     // Enviar el mensaje MIDI CC
     output.send('cc', {
         controller: ccNumber,
@@ -53,6 +53,7 @@ function sendMidiCC(ccNumber, ccValue, midiDevice) {
 
     // Cerrar la conexión MIDI después de enviar el mensaje
     output.close();
+
     console.log(`Enviando CC ${ccNumber} a ${midiDevice}: ${ccValue}`);
 }
 
