@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control MIDI CC</title>
+</head>
+
+<body>
+    <h1>Control MIDI CC</h1>
+    <div>
+        <label for="RESONANCE">CC21 (RESONANCE):</label>
+        <input type="range" id="RESONANCE" min="0" max="127" value="64">
+    </div>
+
+    <div>
+        <label for="CUTOFF">CC74 (CUTOFF):</label>
+        <input type="range" id="CUTOFF" min="0" max="127" value="64">
+    </div>
+
+    <script>
+        //HTML Elements access.
+        const RESONANCE = document.getElementById('RESONANCE');
+        const CUTOFF = document.getElementById('CUTOFF');
+
+        // Conexión WebSocket con el backend
+        const ws = new WebSocket('ws://192.168.0.159:3003');
+
+        // Manejar la apertura de la conexión WebSocket
+        function isOpen(ws) { return ws.readyState === ws.OPEN }
+        if (!isOpen(ws)) {
+            ws.addEventListener('open', (event) => {
+                console.log('Conexión WebSocket abierta');
+            });
+
+            // Manejar los mensajes WebSocket entrantes (opcional)
+            ws.addEventListener('message', (event) => {
+                console.log(`Mensaje recibido del servidor: ${event.data}`);
+            });
+        };
+
+
+        //Manejar el envío del input range
+        RESONANCE.addEventListener('input', () => {
+            const ccNumber = 42;
+            const ccValue = parseInt(RESONANCE.value);
+
+            if (!isNaN(ccNumber) && !isNaN(ccValue)) {
+                const ccMessage = JSON.stringify({ ccNumber, ccValue });
+                if (isOpen(ws)) ws.send(ccMessage);
+            }
+        });
+        CUTOFF.addEventListener('input', () => {
+            const ccNumber = 74;
+            const ccValue = parseInt(CUTOFF.value);
+
+            if (!isNaN(ccNumber) && !isNaN(ccValue)) {
+                const ccMessage = JSON.stringify({ ccNumber, ccValue });
+                if (isOpen(ws)) ws.send(ccMessage);
+            }
+        });
+    </script>
+</body>
+
+</html>

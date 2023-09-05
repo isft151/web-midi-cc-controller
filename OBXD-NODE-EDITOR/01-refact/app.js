@@ -8,7 +8,7 @@ const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
 // TODO HAY QUE PENSAR COMO ENVIAR ESTO UNA SOLA VEZ
-const midiOutput = new easymidi.Output('Client-129:Virtual RawMIDI 129:0');
+const midiOutput = new easymidi.Output('Client-128:Virtual RawMIDI 128:0');
 
 // Ruta raíz
 app.get('/', (req,res)=>{
