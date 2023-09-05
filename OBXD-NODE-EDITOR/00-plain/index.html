@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control MIDI CC</title>
+</head>
+<body>
+    <h1>Control MIDI CC</h1>
+    <div>
+        <label for="ccNumber">Número de CC:</label>
+        <input type="number" id="ccNumber" min="0" max="127">
+    </div>
+    <div>
+        <label for="ccValue">Valor de CC:</label>
+        <input type="number" id="ccValue" min="0" max="127">
+    </div>
+    <div>
+        <button id="sendButton">Enviar CC</button>
+    </div>
+    <div>
+        <label for="midiDevice">Seleccionar dispositivo MIDI:</label>
+        <select id="midiDevice"></select>
+    </div>
+
+    <script>
+        const ccNumberInput = document.getElementById('ccNumber');
+        const ccValueInput = document.getElementById('ccValue');
+        const sendButton = document.getElementById('sendButton');
+        const midiDeviceSelect = document.getElementById('midiDevice');
+
+        // Conexión WebSocket con el backend
+        const ws = new WebSocket('ws://localhost:3000');
+
+        // Manejar la apertura de la conexión WebSocket
+        ws.addEventListener('open', (event) => {
+            console.log('Conexión WebSocket abierta');
+        });
+
+        // Manejar los mensajes WebSocket entrantes (opcional)
+        ws.addEventListener('message', (event) => {
+            console.log(`Mensaje recibido del servidor: ${event.data}`);
+        });
+
+        // Obtener la lista de dispositivos MIDI disponibles
+        fetch('/midi-devices')
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(device => {
+                    const option = document.createElement('option');
+                    option.text = device.name;
+                    option.value = device.name;
+                    midiDeviceSelect.appendChild(option);
+                });
+            });
+
+        // Manejar el clic en el botón "Enviar CC"
+        sendButton.addEventListener('click', () => {
+            const ccNumber = parseInt(ccNumberInput.value);
+            const ccValue = parseInt(ccValueInput.value);
+            const midiDevice = midiDeviceSelect.value;
+
+            if (!isNaN(ccNumber) && !isNaN(ccValue) && midiDevice) {
+                const ccMessage = JSON.stringify({ ccNumber, ccValue, midiDevice });
+                ws.send(ccMessage);
+            }
+        });
+    </script>
+</body>
+</html>
