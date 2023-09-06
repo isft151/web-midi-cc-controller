@@ -5,13 +5,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Control MIDI CC</title>
+    <link rel="stylesheet" type="text/css" href="index.css" />
 </head>
 
 <body>
     <h1>Control MIDI CC</h1>
-    <div>
-        <label for="CUTOFF">CC74 (CUTOFF):</label>
-        <input type="range" id="CUTOFF" min="0" max="127" value="64">
+
+    <div class="container">
+
+        <div class="slider-container">
+
+            <label for="CUTOFF">CC74 (CUTOFF):</label>
+            <div id="cc74-number" class="number">64</div>
+            <input type="range" id="CUTOFF" class="slider" min="0" max="127" value="64">
+
+        </div>
     </div>
     <!-- <div>
         <label for="midiDevice">Seleccionar dispositivo MIDI:</label>
@@ -36,6 +44,16 @@
             // Manejar los mensajes WebSocket entrantes (opcional)
             ws.addEventListener('message', (event) => {
                 console.log(`Mensaje recibido del servidor: ${event.data}`);
+            });
+
+            var sliders = document.querySelectorAll(".slider");
+            var numbers = document.querySelectorAll(".number");
+
+            // Loop through each slider and add the event listener
+            sliders.forEach(function(slider, index) {
+                slider.oninput = function() {
+                    numbers[index].innerHTML = slider.value;
+                };
             });
 
         };
