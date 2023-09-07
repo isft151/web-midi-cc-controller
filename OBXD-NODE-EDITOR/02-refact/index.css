@@ -4,20 +4,22 @@ body{
     margin: 0;
   }
 
-  .container {
-    display: flex;
-    flex-direction: column;
-    width: 400px;
-    position: fixed; /* Change from absolute to fixed */
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%) rotate(-90deg);
-    padding: 20px;
-  }
-  
-  
+h1{
+  font-size: 50px;
+  text-align: center;
+}
 
-
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%) rotate(-90deg);
+  padding: 20px;
+}
+  
 .slider-container {
     display: flex;
     align-items: center;
