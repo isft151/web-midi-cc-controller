@@ -13,13 +13,25 @@
 
     <div class="container">
 
+
         <div class="slider-container">
-
             <label for="CUTOFF">CC74 (CUTOFF):</label>
-            <div id="cc74-number" class="number">64</div>
-            <input type="range" id="CUTOFF" class="slider" min="0" max="127" value="64">
 
+            <div class="slider-wrapper">
+                <div id="cc74-number" class="number">64</div>
+                <input type="range" id="CUTOFF" class="slider" min="0" max="127" value="64">
+            </div>
         </div>
+
+        <div class="slider-container">
+            <label for="Volume">Volume</label>
+
+            <div class="slider-wrapper">
+                <div id="volume-number" class="number">64</div>
+                <input type="range" id="VOLUME" class="slider" min="0" max="127" value="64">
+            </div>
+        </div>
+
     </div>
     <!-- <div>
         <label for="midiDevice">Seleccionar dispositivo MIDI:</label>
@@ -50,8 +62,8 @@
             var numbers = document.querySelectorAll(".number");
 
             // Loop through each slider and add the event listener
-            sliders.forEach(function(slider, index) {
-                slider.oninput = function() {
+            sliders.forEach(function (slider, index) {
+                slider.oninput = function () {
                     numbers[index].innerHTML = slider.value;
                 };
             });
