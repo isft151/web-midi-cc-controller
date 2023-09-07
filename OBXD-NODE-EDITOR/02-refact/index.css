@@ -32,6 +32,7 @@ body{
   transform: rotate(90deg); /* Rotate labels to be horizontal */
   white-space: nowrap; /* Prevent label text from wrapping */
   min-width: 150px; /* Set a minimum width for the label */
+  text-align: center;
 }
 
 
