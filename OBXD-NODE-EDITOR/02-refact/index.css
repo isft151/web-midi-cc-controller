@@ -4,16 +4,18 @@ body{
     margin: 0;
   }
 
-.container{
-  display: flex;
-  flex-direction: column;
-  width: 400px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%,-50%) rotate(-90deg);
-  padding: 20px;
-}
+  .container {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    position: fixed; /* Change from absolute to fixed */
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%) rotate(-90deg);
+    padding: 20px;
+  }
+  
+  
 
 
 .slider-container {
@@ -38,7 +40,7 @@ body{
 
 .slider {
   flex: 1;
-  width: 500px;
+  width: 300px;
   -webkit-appearance: none;
   appearance: none;
   height: 5px;
