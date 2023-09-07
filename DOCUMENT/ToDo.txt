@@ -1,0 +1,5 @@
+Un puerto nuevo para configuración, donde establecer el dispositivo y guardar su descripción en una base de datos.
+
+Configurar Dominio dentro de la red ISFT para que la dirección a donde apunta el QR sea humanamente legible.
+
+
