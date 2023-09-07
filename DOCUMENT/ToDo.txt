@@ -2,4 +2,8 @@ Un puerto nuevo para configuración, donde establecer el dispositivo y guardar s
 
 Configurar Dominio dentro de la red ISFT para que la dirección a donde apunta el QR sea humanamente legible.
 
+Armar script en BASH para levantar todos los servidores.
+
+Configurar IP fijas o dominio.
+
 
