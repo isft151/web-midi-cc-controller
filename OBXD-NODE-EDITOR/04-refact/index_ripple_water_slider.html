@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ripple Component</title>
+  
+  <script src="jquery.min.js"></script>
+  <script src="jquery.ripples.js"></script>
+</head>
+<body>
+<h1 id="banner">ISFT 151 - Testing Surface</h1>
+<div id="waterlayer" class="full-landing-image"></div>
+</body>
+
+<style type="text/css">
+ 
+#banner
+{
+	position: absolute;
+  top: 50%;
+  left: 0;
+  margin: auto;
+  width: 100%;
+  text-align: center;
+  z-index:10;
+}
+body,html{
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-family: 'Nunito', sans-serif;
+}
+body
+{
+  margin:0;
+  padding: 0;
+}
+.full-landing-image
+{
+  width: 100%;
+  height: 100vh;
+  background: url('https://i.postimg.cc/J07vSC9q/hero-background.jpg') no-repeat center;
+  background-size: cover;
+}
+
+</style>
+
+<script type="text/javascript">
+
+//ISFT Modification
+
+var currentCutOffCCValue = 0;
+var currentResonanceCCValue = 0;
+
+function getTranslatedValueCutOff(value)
+{
+	return Math.round(value*127/window.innerWidth);
+}
+
+
+function getTranslatedValueResonance(value)
+{
+	return Math.round(value*127/window.innerHeight);
+}
+
+window.addEventListener('resize', function(){
+    waterlayer.height = window.innerHeight;
+    waterlayer.width = window.innerWidth;
+})
+
+var mouse = {
+    x: undefined,
+    y: undefined
+}
+window.addEventListener('mousemove',
+    function (event) {
+        mouse.x = event.x;
+        mouse.y = event.y;
+       
+        currentCutOffCCValue = getTranslatedValueCutOff(mouse.x);
+        currentResonanceCCValue = getTranslatedValueResonance(mouse.y);
+        banner.innerText = "ISFT 151 - Testing Surface\nCutoff: "+currentCutOffCCValue+"\nResonance: "+currentResonanceCCValue;
+    }
+)
+window.addEventListener('touchmove', 
+    function (event) {
+        
+        mouse.x = touch.clientX;
+        mouse.y = touch.clientY;
+       
+        currentCutOffCCValue = getTranslatedValue(mouse.x, mouse.y);
+        currentResonanceCCValue = getTranslatedValueResonance(mouse.y);
+        banner.innerText = "ISFT 151 - Testing Surface\nCutoff: "+currentCutOffCCValue+"\nResonance: "+currentResonanceCCValue;
+    }
+)
+
+//------------- 
+
+$(".full-landing-image").ripples({
+  resolution: 256,
+  perturbance: 0.01,
+});
+
+</script>
+
+</html>
