@@ -24,7 +24,7 @@
         const CUTOFF = document.getElementById('CUTOFF');
 
         // Conexión WebSocket con el backend
-        const ws = new WebSocket('ws://midiserver:3001');
+        const ws = new WebSocket('ws://192.168.0.101:3001');
 
         // Manejar la apertura de la conexión WebSocket
         function isOpen(ws) { return ws.readyState === ws.OPEN }
