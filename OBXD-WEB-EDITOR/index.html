@@ -1,16 +1,26 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>OBXD Midi CC Controller</title>
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-    
-</head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Game</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: black;
+        }
 
+        canvas {
+            max-width: 100%;
+            border: 1px solid white;
+        }
+    </style>
+</head>
 <body>
-    <h1>OBXD MIDI CC Controller</h1>
-    
     <div>
         <label for="ASPLAYEDALLOCATION">CC21 (ASPLAYEDALLOCATION):</label>
         <input type="range" id="ASPLAYEDALLOCATION" min="0" max="127" value="64">
@@ -21,32 +31,140 @@
         <input type="range" id="BANDPASS" min="0" max="127" value="64">
     </div>
 
-    <div>
-        <label for="BENDLFORATE">CC75 (BENDLFORATE):</label>
-        <input type="range" id="BENDLFORATE" min="0" max="127" value="64">
-    </div>
+    <canvas id="snakeCanvas" width="400" height="400"></canvas>
+    <script>
+        const canvas = document.getElementById('snakeCanvas');
+        const ctx = canvas.getContext('2d');
 
-    <div>
-        <label for="BENDOSC2">CC34 (BENDOSC2):</label>
-        <input type="range" id="BENDOSC2" min="0" max="127" value="64">
-    </div>
+        const tileSize = 10; // Tamaño de la cuadrícula más pequeño
+        const snakeSpeed = 100; // Velocidad de movimiento de la serpiente (más lenta)
 
-    <div>
-        <label for="BRIGHTNESS">CC62 (BRIGHTNESS):</label>
-        <input type="range" id="BRIGHTNESS" min="0" max="127" value="64">
-    </div>
+        let snake = [{ x: 10, y: 10 }];
+        let food = { x: 5, y: 5 };
+        let dx = 1;
+        let dy = 0;
 
-    <div>
-        <label for="BENDRANGE">CC118 (BENDRANGE):</label>
-        <input type="range" id="BENDRANGE" min="0" max="127" value="64">
-    </div>
+        function drawSnake() {
+            ctx.fillStyle = 'green';
+            snake.forEach(segment => {
+                ctx.fillRect(segment.x * tileSize, segment.y * tileSize, tileSize, tileSize);
+            });
+        }
 
-    <div>
-        <label for="midi-output-select">Seleccionar dispositivo de salida MIDI:</label>
-        <select id="midi-output-select"></select>
-    </div>
+        function drawFood() {
+            ctx.fillStyle = 'red';
+            ctx.fillRect(food.x * tileSize, food.y * tileSize, tileSize, tileSize);
+        }
 
-    <script src="midi_controller.js"></script>
+        function moveSnake() {
+            const newHead = { x: snake[0].x + dx, y: snake[0].y + dy };
+            snake.unshift(newHead);
+
+            if (newHead.x === food.x && newHead.y === food.y) {
+                // Snake ate the food, generate new food
+                food.x = Math.floor(Math.random() * (canvas.width / tileSize));
+                food.y = Math.floor(Math.random() * (canvas.height / tileSize));
+            } else {
+                snake.pop();
+            }
+        }
+
+        function checkCollision() {
+            const head = snake[0];
+            if (
+                head.x < 0 || head.x >= canvas.width / tileSize ||
+                head.y < 0 || head.y >= canvas.height / tileSize
+            ) {
+                clearInterval(gameLoop);
+                alert('Game Over!');
+            }
+
+            for (let i = 1; i < snake.length; i++) {
+                if (head.x === snake[i].x && head.y === snake[i].y) {
+                    clearInterval(gameLoop);
+                    alert('Game Over!');
+                }
+            }
+        }
+
+        function modifyRange() {
+            const head = snake[0];
+            const posicionRange = document.getElementById("ASPLAYEDALLOCATION");
+            const valorRango = (head.x / (canvas.width / tileSize)) * 127; // Convierte la posición de la cabeza en el rango de 0-127
+            posicionRange.value = valorRango.toFixed(0); // Redondea el valor y lo establece en la barra
+
+            const posicionRange2 = document.getElementById("BANDPASS");
+            const valorRango2 = (head.y / (canvas.height / tileSize)) * 127; // Convierte la posición de la cabeza en el rango de 0-127
+            posicionRange2.value = valorRango2.toFixed(0); // Redondea el valor y lo establece en la barra
+        }
+
+        function updateGameArea() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawSnake();
+            drawFood();
+            moveSnake();
+            checkCollision();
+            modifyRange()
+        }
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'ArrowUp' && dy === 0) {
+                dx = 0;
+                dy = -1;
+            } else if (event.key === 'ArrowDown' && dy === 0) {
+                dx = 0;
+                dy = 1;
+            } else if (event.key === 'ArrowLeft' && dx === 0) {
+                dx = -1;
+                dy = 0;
+            } else if (event.key === 'ArrowRight' && dx === 0) {
+                dx = 1;
+                dy = 0;
+            }
+        });
+
+        // Agregar eventos de toque para controlar el movimiento
+        let touchStartX, touchStartY;
+
+        canvas.addEventListener('touchstart', (e) => {
+            const touch = e.touches[0];
+            touchStartX = touch.clientX;
+            touchStartY = touch.clientY;
+        });
+
+        canvas.addEventListener('touchmove', (e) => {
+            const touch = e.touches[0];
+            const touchEndX = touch.clientX;
+            const touchEndY = touch.clientY;
+
+            const deltaX = touchEndX - touchStartX;
+            const deltaY = touchEndY - touchStartY;
+
+            // Evitar movimientos opuestos
+            if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                if (deltaX > 0 && dx !== -1) {
+                    dx = 1;
+                    dy = 0;
+                } else if (deltaX < 0 && dx !== 1) {
+                    dx = -1;
+                    dy = 0;
+                }
+            } else {
+                if (deltaY > 0 && dy !== -1) {
+                    dx = 0;
+                    dy = 1;
+                } else if (deltaY < 0 && dy !== 1) {
+                    dx = 0;
+                    dy = -1;
+                }
+            }
+
+            touchStartX = touchEndX;
+            touchStartY = touchEndY;
+        });
+
+        const gameLoop = setInterval(updateGameArea, snakeSpeed);
+
+    </script>
 </body>
-
 </html>
