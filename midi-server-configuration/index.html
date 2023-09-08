@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control MIDI CC - CONFIGURATION</title>
+</head>
+<body>
+    <h1>Control MIDI CC - CONFIGURATION</h1>
+    <div>
+        <label for="midiDevice">Seleccionar dispositivo MIDI:</label>
+        <select id="midiDevice"></select>
+    </div>
+    <div>
+        <button id="sendButton">Guardar Configuración</button>
+    </div>
+
+
+    <script>
+        const midiDeviceSelect = document.getElementById('midiDevice');
+        const sendButton = document.getElementById('sendButton');
+
+        // Conexión WebSocket con el backend
+        const ws = new WebSocket('ws://192.168.0.101:4000');
+
+        // Manejar la apertura de la conexión WebSocket
+        function isOpen(ws) { return ws.readyState === ws.OPEN }
+        if (!isOpen(ws)) 
+        {
+            ws.addEventListener('open', (event) => {
+                console.log('Conexión WebSocket abierta');
+            });
+
+            // Manejar los mensajes WebSocket entrantes (opcional)
+            ws.addEventListener('message', (event) => {
+                console.log(`Mensaje recibido del servidor: ${event.data}`);
+            });
+        };
+
+        // Obtener la lista de dispositivos MIDI disponibles
+        fetch('/midi-devices')
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(device => {
+                    const option = document.createElement('option');
+                    option.text = device.name;
+                    option.value = device.name;
+                    midiDeviceSelect.appendChild(option);
+                });
+            });
+
+        // Manejar el clic en el botón "Enviar CC"
+        sendButton.addEventListener('click', () => {
+            const midiDevice = midiDeviceSelect.value;
+
+            if (midiDevice) {
+                const ccMessage = JSON.stringify({ midiDevice });
+                if (isOpen(ws)) ws.send(ccMessage);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="icon" type="image/x-icon" href="favicon.ico"> -->
+    <!-- <link href="style.css" rel="stylesheet"> -->
+    <style>
+        body,html{
+            background-color: black;
+            margin: 0;
+            padding: 0;
+            border: 0;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        canvas{
+            margin: 0;
+            padding: 0;
+            display: block; /*  ¯\_(ツ)_/¯  */
+            touch-action: none; 
+        }
+        h1{
+            position: absolute;
+            top: 50%;
+            left: 0;
+            margin: auto;
+            width: 100%;
+            text-align: center;
+        }
+    </style>
+    <title>Control MIDI CC</title>
+</head>
+
+<body>
+    <h1>Control MIDI CC</h1>
+    <canvas></canvas>
+
+    <script>
+        // Conexión WebSocket con el backend
+        const ws = new WebSocket('ws://192.168.0.101:3002');
+
+        // Manejar la apertura de la conexión WebSocket
+        function isOpen(ws) { return ws.readyState === ws.OPEN }
+        if (!isOpen(ws)) {
+            ws.addEventListener('open', (event) => {
+                console.log('Conexión WebSocket abierta');
+            });
+
+            // Manejar los mensajes WebSocket entrantes (opcional)
+            ws.addEventListener('message', (event) => {
+                console.log(`Mensaje recibido del servidor: ${event.data}`);
+            });
+        };
+        
+        //ISFT Modification
+
+        var currentCutOffCCValue = 0;
+        var currentResonanceCCValue = 0;
+
+        function getTranslatedValueCutOff(value)
+        {
+            return Math.round(value*127/window.innerWidth);
+        }
+
+
+        function getTranslatedValueResonance(value)
+        {
+            return Math.round(value*127/window.innerHeight);
+        }
+
+        //-------------        
+        ///CANVAS-.....
+        var canvas = document.querySelector('canvas');
+        canvas.height = window.innerHeight;
+        canvas.width = window.innerWidth;
+        c = canvas.getContext('2d');
+
+        window.addEventListener('resize', function(){
+            canvas.height = window.innerHeight;
+            canvas.width = window.innerWidth;
+
+            initCanvas();
+        })
+
+        var mouse = {
+            x: undefined,
+            y: undefined
+        }
+        window.addEventListener('mousemove',
+            function (event) {
+                mouse.x = event.x;
+                mouse.y = event.y;
+                drawCircles();
+                currentCutOffCCValue = getTranslatedValueCutOff(mouse.x);
+                currentResonanceCCValue = getTranslatedValueResonance(mouse.y);
+                // banner.innerText = "ISFT 151 - Testing Surface\nCutoff: "+currentCutOffCCValue+"\nResonance: "+currentResonanceCCValue;
+                if (!isNaN(currentCutOffCCValue)) 
+                {
+                    const ccNumber = 74;
+                    const ccValue = currentCutOffCCValue;
+                    const ccMessage = JSON.stringify({ ccNumber, ccValue });
+                    if (isOpen(ws)) ws.send(ccMessage);
+                }
+                if (!isNaN(currentResonanceCCValue)) 
+                {
+                    const ccNumber = 42;
+                    const ccValue = currentResonanceCCValue;
+                    const ccMessage = JSON.stringify({ ccNumber, ccValue });
+                    if (isOpen(ws)) ws.send(ccMessage);
+                }
+            }
+        )
+        window.addEventListener('touchmove', 
+            function (event) {
+                let touch = event.touches[0];
+                mouse.x = touch.clientX;
+                mouse.y = touch.clientY;
+                drawCircles();
+                currentCutOffCCValue = getTranslatedValueCutOff(mouse.x);
+                currentResonanceCCValue = getTranslatedValueResonance(mouse.y);
+                // banner.innerText = "ISFT 151 - Testing Surface\nCutoff: "+currentCutOffCCValue+"\nResonance: "+currentResonanceCCValue;
+                if (!isNaN(currentCutOffCCValue)) 
+                {
+                    const ccNumber = 74;
+                    const ccValue = currentCutOffCCValue;
+                    const ccMessage = JSON.stringify({ ccNumber, ccValue });
+                    if (isOpen(ws)) ws.send(ccMessage);
+                }
+                if (!isNaN(currentResonanceCCValue)) 
+                {
+                    const ccNumber = 42;
+                    const ccValue = currentResonanceCCValue;
+                    const ccMessage = JSON.stringify({ ccNumber, ccValue });
+                    if (isOpen(ws)) ws.send(ccMessage);
+                }
+            }
+        )
+
+        function Circle(x, y, radius, vx, vy, rgb, opacity, birth, life){
+            this.x = x;
+            this.y = y;
+            this.radius = radius;
+            this.minRadius = radius;
+            this.vx = vx;
+            this.vy = vy;
+            this.birth = birth;
+            this.life = life;
+            this.opacity = opacity;
+
+            this.draw = function() {
+                c.beginPath();
+                c.arc(this.x, this.y, this.radius, Math.PI * 2, false);
+                c.fillStyle = 'rgba(' + rgb +','+ this.opacity +')';
+                c.fill();
+            }
+
+            this.update = function(){
+                if (this.x + this.radius > innerWidth || this.x - this.radius < 0) {
+                    this.vx = -this.vx;
+                }
+
+                if (this.y + this.radius > innerHeight || this.y - this.radius < 0) {
+                    this.vy = -this.vy;
+                }
+
+                this.x += this.vx;
+                this.y += this.vy;
+
+                this.opacity = 1- (((frame - this.birth) * 1) / this.life);
+
+                if (frame > this.birth + this.life){
+                    for (let i = 0; i < circleArray.length; i++){
+                        if (this.birth == circleArray[i].birth && this.life == circleArray[i].life){
+                            circleArray.splice(i, 1);
+                            break;
+                        }
+                    }
+                } else{
+                    this.draw();
+                }
+            }
+
+        }
+
+        var circleArray = [];
+
+        function initCanvas() {
+            circleArray = [];
+        }
+
+        var colorArray = [
+            '355,85,80',
+            '9,80,100',
+            '343,81,45'
+        ]
+
+        function drawCircles(){
+            for (let i = 0; i < 6; i++) {
+                let radius = Math.floor(Math.random() * 4) + 2;
+                let vx = (Math.random() * 2) - 1;
+                let vy = (Math.random() * 2) - 1;
+                let spawnFrame = frame;
+                let rgb = colorArray[Math.floor(Math.random() * colorArray.length)];
+                let life = 100;
+                circleArray.push(new Circle(mouse.x, mouse.y, radius, vx, vy, rgb, 1, spawnFrame, life));
+
+            }
+        }
+
+        var frame = 0;
+        function animate() {
+            requestAnimationFrame(animate);
+            frame += 1;
+            c.clearRect(0, 0, innerWidth, innerHeight);
+            for (let i = 0; i < circleArray.length; i++ ){
+                circleArray[i].update();
+            }
+            
+        }
+
+        initCanvas();
+        animate();
+
+        // This is just for demo purposes :
+        for (let i = 1; i < 110; i++) {
+            (function (index) {
+                setTimeout(function () { 
+                    mouse.x = 100 + i * 10;
+                    mouse.y = 100;
+                    drawCircles();
+                }, i * 10);
+            })(i);
+        }
+    </script>
+</body>
+
+</html>
