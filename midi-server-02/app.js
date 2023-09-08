@@ -79,7 +79,7 @@ function sendMidiCC(ccNumber, ccValue) {
     midiOutput.send('cc', {
         controller: ccNumber,
         value: ccValue,
-        channel: 0, // Canal MIDI (cambia si es necesario)
+        channel: 1, // Canal 2 MIDI (cambia si es necesario)
     });
 
     // Cerrar la conexión MIDI después de enviar el mensaje NO CERRAR!!!!
