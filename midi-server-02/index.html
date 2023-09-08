@@ -114,23 +114,25 @@
         )
         window.addEventListener('touchmove', 
             function (event) {
-                const ccCutoffNumber = 74;
-                const ccResonanceNumber = 42;
                 let touch = event.touches[0];
                 mouse.x = touch.clientX;
                 mouse.y = touch.clientY;
                 drawCircles();
-                currentCutOffCCValue = parseInt(getTranslatedValue(mouse.x, mouse.y));
-                currentResonanceCCValue = parseInt(getTranslatedValueResonance(mouse.y));
+                currentCutOffCCValue = getTranslatedValueCutOff(mouse.x);
+                currentResonanceCCValue = getTranslatedValueResonance(mouse.y);
                 // banner.innerText = "ISFT 151 - Testing Surface\nCutoff: "+currentCutOffCCValue+"\nResonance: "+currentResonanceCCValue;
-                if (!isNaN(ccCutoffNumber) && !isNaN(currentCutOffCCValue)) 
+                if (!isNaN(currentCutOffCCValue)) 
                 {
-                    const ccMessage = JSON.stringify({ ccCutoffNumber, currentCutOffCCValue });
+                    const ccNumber = 74;
+                    const ccValue = currentCutOffCCValue;
+                    const ccMessage = JSON.stringify({ ccNumber, ccValue });
                     if (isOpen(ws)) ws.send(ccMessage);
                 }
-                if (!isNaN(ccResonanceNumber) && !isNaN(currentResonanceCCValue)) 
+                if (!isNaN(currentResonanceCCValue)) 
                 {
-                    const ccMessage = JSON.stringify({ ccResonanceNumber, currentResonanceCCValue });
+                    const ccNumber = 42;
+                    const ccValue = currentResonanceCCValue;
+                    const ccMessage = JSON.stringify({ ccNumber, ccValue });
                     if (isOpen(ws)) ws.send(ccMessage);
                 }
             }
