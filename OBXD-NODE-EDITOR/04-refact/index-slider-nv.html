@@ -60,6 +60,20 @@
                 positionRange.value = positionValue;
                 pc.uniforms.uMousePos.value.set(mouseX, 0); // Establece la posición de la partícula
             });
+                // Eventos táctiles para dispositivos móviles
+            document.addEventListener('touchstart', (event) => {
+                const touch = event.touches[0];
+                const touchX = touch.clientX / window.innerWidth;
+                const touchY = 1 - touch.clientY / window.innerHeight;
+                updateCursorPosition(touchX, touchY);
+            });
+
+            document.addEventListener('touchmove', (event) => {
+                const touch = event.touches[0];
+                const touchX = touch.clientX / window.innerWidth;
+                const touchY = 1 - touch.clientY / window.innerHeight;
+                updateCursorPosition(touchX, touchY);
+            });
         });
     </script>
 
