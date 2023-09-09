@@ -47,12 +47,6 @@
 
             const positionRange = document.getElementById('BANDPASS');
 
-            // Actualiza la posición de la partícula basada en el valor del rango
-            positionRange.addEventListener('input', (event) => {
-                const newValue = parseFloat(event.target.value) / 127; // Normaliza el valor a 0-1
-                pc.uniforms.uPositionValue.value = newValue;
-            });
-
             // Escucha el evento 'mousemove' para actualizar el valor del rango
             document.addEventListener('mousemove', (event) => {
                 const mouseX = event.clientX / window.innerWidth;
@@ -73,6 +67,12 @@
                 const touchX = touch.clientX / window.innerWidth;
                 const touchY = 1 - touch.clientY / window.innerHeight;
                 updateCursorPosition(touchX, touchY);
+            });            
+            
+            // Actualiza la posición de la partícula basada en el valor del rango
+            positionRange.addEventListener('input', (event) => {
+                const newValue = parseFloat(event.target.value) / 127; // Normaliza el valor a 0-1
+                pc.uniforms.uPositionValue.value = newValue;
             });
         });
     </script>
