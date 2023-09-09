@@ -1,74 +1,38 @@
-body{
-    background-color: grey;
-    padding: 0;
-    margin: 0;
-  }
-
 h1{
-  font-size: 50px;
+  font-size: 40px;
   text-align: center;
 }
 
+html {
+  text-align: center;
+  background-color: #555;
+  margin: none;
+  padding: 0;
+}
+
+/* Style the container */
 .container {
   display: flex;
-  flex-direction: column;
-  width: 400px;
-  position: fixed;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%) rotate(-90deg);
-  padding: 20px;
+  flex-wrap: wrap; /* Allow items to wrap into multiple rows */
+  justify-content: center; /* Center items horizontally */
+  margin-top: 60px;
 }
-  
+
+/* Style the slider container */
 .slider-container {
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    margin-bottom: 150px;
+  display: flex;
+  flex-direction: column; /* Arrange the slider and number vertically */
+  align-items: center; /* Center items horizontally within the container */
+  margin: 10px; /* Adjust the margin between sliders */
+
 }
 
 .slider-container label {
-  font-family: 'Poppins', sans-serif;
-  font-weight: 600;
-  font-size: 20px;
-  color: #000; /* Change the color to your preference */
-  margin-right: 10px; /* Add some spacing between label and slider */
-  transform: rotate(90deg); /* Rotate labels to be horizontal */
-  white-space: nowrap; /* Prevent label text from wrapping */
-  min-width: 150px; /* Set a minimum width for the label */
-  text-align: center;
+  margin-bottom: -70px; /* Adjust the margin-bottom as needed */
 }
 
-
-.slider {
-  flex: 1;
-  width: 300px;
-  -webkit-appearance: none;
-  appearance: none;
-  height: 5px;
-  position: relative;
-  background-color: rgba(255,255,255,0.4);
-  border-radius: 5px;
-  outline: none;
-}
-
-.slider-wrapper {
-  display: flex;
-  align-items: center;
-  height: 100%;
-}
-
-input[type="range"]::-webkit-slider-thumb{
-  -webkit-appearance: none;
-  background: linear-gradient(white, white) no-repeat, black;
-  background-size: 2px 100%, auto;
-  background-position: center; /* Center the white line */
-  height: 45px;
-  width: 20px;
-  border-radius: 5px;
-}
-
-.number{
+/* Style the number */
+.number {
   background-color: #ffd901;
   height: 40px;
   width: 70px;
@@ -79,17 +43,88 @@ input[type="range"]::-webkit-slider-thumb{
   font-weight: 600;
   font-size: 20px;
   border-radius: 3px;
-  transform: rotate(90deg);
-  margin-right: 10px;
+  margin-top: 80px;
 }
 
-#number:before{
-  position: absolute;
-  content: "";
-  height: 0;
-  width: 0;
-  border-bottom: 10px solid red;
-  border-left: 8px solid transparent;
-  border-right: 8px solid transparent;
-  top: -9px;
+/* Additional styles for the slider */
+input[type='range'] {
+  writing-mode: bt-lr;
+  width: 240px;
+  height: 10px;
+  outline: 0;
+  border-radius: 5px;
+  background-color: #0b0b0b;
+  box-shadow: inset 1px 1px 0 1px #6d6d6d;
+  transform: rotate(-90deg);
+  touch-action: none; /* Disable default touch interactions */
+}
+
+input[type='range'] {
+  margin-top: 60px;
+  writing-mode: bt-lr;
+  width: 80px;
+  height: 240px;
+  padding: 0;
+}
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  input[type='range'] {
+    -webkit-appearance: none;
+    appearance: none;
+    -webkit-transform: rotate(-90deg);
+    transform: rotate(-90deg);
+    width: 140px;
+    height: 10px;
+    margin-top: 160px;
+    outline: 0;
+    border-radius: 5px;
+    background-color: #0b0b0b;
+    box-shadow: inset 1px 1px 0 1px #6d6d6d;
+  }
+}
+
+input[type='range']::-ms-track {
+  width: 10px;
+  height: 240px;
+  border-radius: 5px;
+  background-color: #0b0b0b;
+  box-shadow: inset 1px 1px 0 1px #6d6d6d;
+  border: 0;
+}
+
+input[type='range']::-moz-range-track {
+  width: 10px;
+  height: 240px;
+  border-radius: 5px;
+  background-color: #0b0b0b;
+  box-shadow: inset 1px 1px 0 1px #6d6d6d;
+  border: 0;
+}
+
+input[type='range']::-webkit-slider-thumb {
+  width: 72px;
+  height: 32px;
+  -webkit-appearance: none;
+  background-image: -webkit-linear-gradient(left, #0f0f0f, #2e2e2e 4%, #0f0f0f 8%, #000 47%, #808080 48%, #808080 52%, #000 53%, #1a1a1a 96%, #2e2e2e);
+  box-shadow: 5px -10px 20px 0 #1a1a1a;
+}
+
+input[type='range']::-ms-thumb {
+  width: 32px;
+  height: 72px;
+  border: 0;
+  box-shadow: -10px -5px 20px 0 #1a1a1a;
+  background-image: -ms-linear-gradient(bottom, #0f0f0f, #2e2e2e 4%, #0f0f0f 8%, #000 47%, #808080 48%, #808080 52%, #000 53%, #1a1a1a 96%, #2e2e2e);
+}
+
+input[type='range']::-ms-tooltip {
+  display: none;
+}
+
+input[type='range']::-moz-range-thumb {
+  width: 32px;
+  height: 72px;
+  border: 0;
+  box-shadow: -10px -5px 20px 0 #1a1a1a;
+  background-image: -moz-linear-gradient(bottom, #0f0f0f, #2e2e2e 4%, #0f0f0f 8%, #000 47%, #808080 48%, #808080 52%, #000 53%, #1a1a1a 96%, #2e2e2e);
+  border-radius: 0;
 }

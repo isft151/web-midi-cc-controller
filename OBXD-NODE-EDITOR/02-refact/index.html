@@ -9,28 +9,34 @@
 </head>
 
 <body>
-    <h1>Control MIDI CC</h1>
-
     <div class="container">
 
+        <div class="slider-container">
+            <label for="CUTOFF1">CC74 (CUTOFF 1):</label>
+            <input type="range" id="CUTOFF" step="1" min="0" max="127" value="64">
+            <div class="number">64</div>
+        </div>
+
 
         <div class="slider-container">
-            <label for="CUTOFF">CC74 (CUTOFF):</label>
-
-            <div class="slider-wrapper">
-                <div id="cc74-number" class="number">64</div>
-                <input type="range" id="CUTOFF" class="slider" min="0" max="127" value="64">
-            </div>
+            <label for="CUTOFF1">CC74 (CUTOFF 1):</label>
+            <input type="range" id="CUTOFF1" step="1" min="0" max="127" value="64">
+            <div class="number">64</div>
         </div>
 
         <div class="slider-container">
-            <label for="Volume">Volume</label>
-
-            <div class="slider-wrapper">
-                <div id="volume-number" class="number">64</div>
-                <input type="range" id="VOLUME" class="slider" min="0" max="127" value="64">
-            </div>
+            <label for="CUTOFF1">CC74 (CUTOFF 1):</label>
+            <input type="range" id="CUTOFF1" step="1" min="0" max="127" value="64">
+            <div class="number">64</div>
         </div>
+
+        <div class="slider-container">
+            <label for="CUTOFF1">CC74 (CUTOFF 1):</label>
+            <input type="range" id="CUTOFF1" step="1" min="0" max="127" value="64">
+            <div class="number">64</div>
+        </div>
+
+    </div>
 
     </div>
     <!-- <div>
@@ -57,19 +63,8 @@
             ws.addEventListener('message', (event) => {
                 console.log(`Mensaje recibido del servidor: ${event.data}`);
             });
-
-            var sliders = document.querySelectorAll(".slider");
-            var numbers = document.querySelectorAll(".number");
-
-            // Loop through each slider and add the event listener
-            sliders.forEach(function (slider, index) {
-                slider.oninput = function () {
-                    numbers[index].innerHTML = slider.value;
-                };
-            });
-
         };
-
+        
         // Obtener la lista de dispositivos MIDI disponibles
         // fetch('/midi-devices')
         //     .then(response => response.json())
@@ -94,6 +89,18 @@
                 if (isOpen(ws)) ws.send(ccMessage);
             }
         });
+
+        // Updates the number based on the value of the slider.
+        var sliders = document.querySelectorAll("input");
+        var numbers = document.querySelectorAll(".number");
+
+        // Loop through each slider and add the event listener
+        sliders.forEach(function (slider, index) {
+            slider.oninput = function () {
+                numbers[index].innerHTML = slider.value;
+            };
+        });
+
     </script>
 </body>
 
