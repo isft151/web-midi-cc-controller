@@ -10,44 +10,6 @@ const wss = new WebSocket.Server({ server });
 
 const midiDevice = 'Client-128:Virtual RawMIDI 128:0';
 
-// // Función para leer la configuración desde el archivo JSON
-// function readConfiguration(callback) {
-//     fs.readFile('../server-midi-configuration/config.json', 'utf8', (err, data) => {
-//         if (err) {
-//             // Si hay un error al leer el archivo, puedes manejarlo aquí.
-//             console.error('Error al leer la configuración:', err);
-//             callback(err, null);
-//             return;
-//         }
-
-//         try {
-//             // Analiza los datos JSON en un objeto JavaScript
-//             const config = JSON.parse(data);
-//             callback(null, config);
-//         } catch (err) {
-//             // Si hay un error al analizar el JSON, puedes manejarlo aquí.
-//             console.error('Error al analizar la configuración JSON:', err);
-//             callback(err, null);
-//         }
-//     });
-// }
-
-// // Usar la función para leer la configuración
-// readConfiguration((err, config) => 
-// {
-//     if (!err) 
-//     {
-//         // La configuración se ha leído con éxito, puedes acceder a 'config.midiDevice' aquí.
-//         midiDevice = config.midiDevice;
-//         console.log('Midi Device:', config.midiDevice);
-//     } 
-//     else 
-//     {
-//         // Manejar el error si no se puede leer la configuración.
-//         console.error('No se pudo leer la configuración.');
-//     }
-// });
-
 // TODO HAY QUE PENSAR COMO ENVIAR ESTO UNA SOLA VEZ
 const midiOutput = new easymidi.Output(midiDevice);
 
@@ -79,7 +41,7 @@ function sendMidiCC(ccNumber, ccValue) {
     midiOutput.send('cc', {
         controller: ccNumber,
         value: ccValue,
-        channel: 0, // Canal MIDI (cambia si es necesario)
+        channel: 0, // Canal 1 MIDI (cambia si es necesario)
     });
 
     // Cerrar la conexión MIDI después de enviar el mensaje NO CERRAR!!!!
