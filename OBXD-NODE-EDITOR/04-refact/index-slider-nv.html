@@ -1,25 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./css/style-slider-nv.css">
-
+    <link rel="stylesheet" href="style-slider-nv.css">
 </head>
 <body>
-   
     <div id="app">
         <div id="hero">
-
-            <input type="range" id="BANDPASS" min="0" max="127" value="0">
-
-          </div>
-          
+            <input type="range" id="BANDPASS" min="0" max="127">
+        </div>
     </div>
 
     <script type="module">
-
         import { particlesCursor } from 'http://localhost:8080/threejs-toys.module.min.js';
+
         document.addEventListener('DOMContentLoaded', () => {
             const pc = particlesCursor({
                 el: document.getElementById('app'),
@@ -37,45 +32,35 @@
                 sleepTimeCoefY: 0.002
             });
 
-            // Actualiza las partículas dependiendo el movimiento del mouse
-            document.addEventListener('mousemove', (event) => {
-                const mouseX = event.clientX / window.innerWidth;
-                const mouseY = 1 - event.clientY / window.innerHeight;
-                
-                pc.uniforms.uMousePos.value.set(mouseX, mouseY);
-            });
-
             const positionRange = document.getElementById('BANDPASS');
 
-            // Escucha el evento 'mousemove' para actualizar el valor del rango
-            document.addEventListener('mousemove', (event) => {
-                const mouseX = event.clientX / window.innerWidth;
-                const positionValue = Math.floor(mouseX * 127); // Escala el valor a 0-127
-                positionRange.value = positionValue;
-                pc.uniforms.uMousePos.value.set(mouseX, 0); // Establece la posición de la partícula
-            });
-                // Eventos táctiles para dispositivos móviles
-            document.addEventListener('touchstart', (event) => {
-                const touch = event.touches[0];
-                const touchX = touch.clientX / window.innerWidth;
-                const touchY = 1 - touch.clientY / window.innerHeight;
-                updateCursorPosition(touchX, touchY);
-            });
+            if (positionRange) {
+               
+                document.addEventListener('mousemove', (event) => {
+                    updateInputValue(event.clientX);
+                });
 
-            document.addEventListener('touchmove', (event) => {
-                const touch = event.touches[0];
-                const touchX = touch.clientX / window.innerWidth;
-                const touchY = 1 - touch.clientY / window.innerHeight;
-                updateCursorPosition(touchX, touchY);
-            });            
-            
-            // Actualiza la posición de la partícula basada en el valor del rango
-            positionRange.addEventListener('input', (event) => {
-                const newValue = parseFloat(event.target.value) / 127; // Normaliza el valor a 0-1
-                pc.uniforms.uPositionValue.value = newValue;
+                
+                document.addEventListener('touchstart', (event) => {
+                    const touchX = event.touches[0].clientX;
+                    updateInputValue(touchX);
+                });
+
+                document.addEventListener('touchmove', (event) => {
+                    const touchX = event.touches[0].clientX;
+                    updateInputValue(touchX);
+                });
+            } else {
+                console.error("Elemento con el ID 'BANDPASS' no encontrado.");
+            }
+
+            function updateInputValue(xPosition) {
+                const windowWidth = window.innerWidth;
+                const normalizedValue = xPosition / windowWidth; 
+                const newValue = Math.round(normalizedValue * 127);
+                positionRange.value = newValue;
+            }
             });
-        });
     </script>
-
 </body>
 </html>
