@@ -1,5 +1,6 @@
 # Authors, Students of ISFT 151:
-* ISFT151: 
+* ISFT151:
+    - Acuña, Aldana
 
 # Authors, Professors:
 * ISFT151: 
