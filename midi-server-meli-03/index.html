@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rotación Controlada por el Mouse con Palitos</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header>
+        <h1>Control MIDI CC 3</h1>
+    </header>
+
+    <main>
+    <div>
+        <label for="ccParameter">Selecciona un parámetro:</label>
+        <select id="ccParameter">
+            <option value="21">ASPLAYEDALLOCATION</option>
+            <option value="105">BANDPASS</option>
+            <option value="75">BENDLFORATE</option>
+            <option value="34">BENDOSC2</option>
+            <option value="118">BENDRANGE</option>
+            <option value="62">BRIGHTNESS</option>
+            <option value="74">CUTOFF</option>
+            <option value="111">ECONOMY_MODE</option>
+            <option value="115">ENV_PITCH_BOTH</option>
+            <option value="108">ENVDER</option>
+            <option value="107">ENVELOPE_AMT</option>
+            <option value="63">ENVPITCH</option>
+            <option value="38">FATK</option>
+            <option value="39">FDEC</option>
+            <option value="116">FENV_INVERT</option>
+            <option value="18">FILTER_WARM</option>
+            <option value="109">FILTERDER</option>
+            <option value="103">FLT_KF</option>
+            <option value="106">FOURPOLE</option>
+            <option value="41">FREL</option>
+            <option value="40">FSUS</option>
+            <option value="73">LATK</option>
+            <option value="36">LDEC</option>
+            <option value="35">LEGATOMODE</option>
+            <option value="118">LEVEL_DIF</option>
+            <option value="22">LFO1AMT</option>
+            <option value="25">LFO2AMT</option>
+            <option value="49">LFOFILTER</option>
+            <option value="19">LFOFREQ</option>
+            <option value="47">LFOOSC1</option>
+            <option value="48">LFOOSC2</option>
+            <option value="50">LFOPW1</option>
+            <option value="51">LFOPW2</option>
+            <option value="46">LFOSHWAVE</option>
+            <option value="44">LFOSINWAVE</option>
+            <option value="45">LFOSQUAREWAVE</option>
+            <option value="72">LREL</option>
+            <option value="37">LSUS</option>
+            <option value="104">MULTIMODE</option>
+            <option value="102">NOISEMIX</option>
+            <option value="17">OCTAVE</option>
+            <option value="77">OSC1MIX</option>
+            <option value="54">OSC1P</option>
+            <option value="58">OSC1Pul</option>
+            <option value="57">OSC1Saw</option>
+            <option value="43">OSC2_DET</option>
+            <option value="52">OSC2HS</option>
+            <option value="78">OSC2MIX</option>
+            <option value="55">OSC2P</option>
+            <option value="60">OSC2Pul</option>
+            <option value="59">OSC2Saw</option>
+            <option value="56">OSCQuantize</option>
+            <option value="81">PAN1</option>
+            <option value="82">PAN2</option>
+            <option value="83">PAN3</option>
+            <option value="84">PAN4</option>
+            <option value="85">PAN5</option>
+            <option value="86">PAN6</option>
+            <option value="87">PAN7</option>
+            <option value="88">PAN8</option>
+            <option value="110">PORTADER</option>
+            <option value="23">PORTAMENTO</option>
+            <option value="61">PW</option>
+            <option value="113">PW_ENV</option>
+            <option value="114">PW_ENV_BOTH</option>
+            <option value="117">PW_OSC2_OFS</option>
+            <option value="42">RESONANCE</option>
+            <option value="119">SELF_OSC_PUSH</option>
+            <option value="33">TUNE</option>
+            <option value="24">UDET</option>
+            <option value="16">UNISON</option>
+            <option value="20">VAMPENV</option>
+            <option value="76">VFLTENV</option>
+            <option value="15">VOICE_COUNT</option>
+            <option value="71">VOLUME</option>
+            <option value="53">XMOD</option>
+        </select>
+        </div>
+
+        <div class="wrapper" id="wrapper"></div>
+
+
+        <script>
+            // HTML Elements access.
+            const ccParameterSelect = document.getElementById('ccParameter');
+            const ccValueRange = document.getElementById('ccValue'); 
+            // Conexión WebSocket con el backend
+            const ws = new WebSocket('ws://192.168.0.101:3003');
+            // Manejar la apertura de la conexión WebSocket
+            function isOpen(ws) { return ws.readyState === ws.OPEN }
+            if (!isOpen(ws)) {
+                ws.addEventListener('open', (event) => {
+                    console.log('Conexión WebSocket abierta');
+                });
+            };
+            // Manejar el cambio de selección de parámetro
+            ccParameterSelect.addEventListener('change', () => {
+                // Obtener el número de parámetro seleccionado
+                const ccNumber = ccParameterSelect.value;
+                console.log('ccNumber: ' + ccNumber);
+                // Obtener el valor actual del rango
+                const ccValue = ccValueRange.value;
+                console.log('ccValue: ' + ccValue);
+                if (!isNaN(ccNumber) && !isNaN(ccValue)) {
+                    const ccMessage = JSON.stringify({ ccNumber, ccValue });
+                    if (isOpen(ws)) ws.send(ccMessage);
+                }
+            });
+            
+        </script>
+    </main>
+
+    <footer>
+        <p> Derechos de autor © 2023 ISFT N° 151 Web</p>
+    </footer>
+    
+    <script src="animation.js"></script>
+    
+    </body>
+</html>

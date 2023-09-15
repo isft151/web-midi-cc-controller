@@ -1,0 +1,150 @@
+mkdir midi-control-app
+cd midi-control-app
+npm init -y
+npm install express midi, http, ws, easymidi 
+
+
+
+Claro, puedo proporcionarte un ejemplo completo que incluye tanto el código del frontend como el código del backend en Node.js. En este ejemplo, el frontend enviará mensajes MIDI CC al backend a través de WebSocket, y el backend los enviará a un dispositivo MIDI seleccionado. Asegúrate de tener instalados los módulos express, http, ws y easymidi en tu proyecto de Node.js.
+
+Primero, aquí está el código del frontend (index.html):
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control MIDI CC</title>
+</head>
+<body>
+    <h1>Control MIDI CC</h1>
+    <div>
+        <label for="ccNumber">Número de CC:</label>
+        <input type="number" id="ccNumber" min="0" max="127">
+    </div>
+    <div>
+        <label for="ccValue">Valor de CC:</label>
+        <input type="number" id="ccValue" min="0" max="127">
+    </div>
+    <div>
+        <button id="sendButton">Enviar CC</button>
+    </div>
+    <div>
+        <label for="midiDevice">Seleccionar dispositivo MIDI:</label>
+        <select id="midiDevice"></select>
+    </div>
+
+    <script>
+        const ccNumberInput = document.getElementById('ccNumber');
+        const ccValueInput = document.getElementById('ccValue');
+        const sendButton = document.getElementById('sendButton');
+        const midiDeviceSelect = document.getElementById('midiDevice');
+
+        // Conexión WebSocket con el backend
+        const ws = new WebSocket('ws://localhost:3000');
+
+        // Manejar la apertura de la conexión WebSocket
+        ws.addEventListener('open', (event) => {
+            console.log('Conexión WebSocket abierta');
+        });
+
+        // Manejar los mensajes WebSocket entrantes (opcional)
+        ws.addEventListener('message', (event) => {
+            console.log(`Mensaje recibido del servidor: ${event.data}`);
+        });
+
+        // Obtener la lista de dispositivos MIDI disponibles
+        fetch('/midi-devices')
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(device => {
+                    const option = document.createElement('option');
+                    option.text = device.name;
+                    option.value = device.name;
+                    midiDeviceSelect.appendChild(option);
+                });
+            });
+
+        // Manejar el clic en el botón "Enviar CC"
+        sendButton.addEventListener('click', () => {
+            const ccNumber = parseInt(ccNumberInput.value);
+            const ccValue = parseInt(ccValueInput.value);
+            const midiDevice = midiDeviceSelect.value;
+
+            if (!isNaN(ccNumber) && !isNaN(ccValue) && midiDevice) {
+                const ccMessage = JSON.stringify({ ccNumber, ccValue, midiDevice });
+                ws.send(ccMessage);
+            }
+        });
+    </script>
+</body>
+</html>
+
+################################################################################################################################
+Luego, aquí está el código del backend en Node.js (app.js):
+
+const express = require('express');
+const http = require('http');
+const WebSocket = require('ws');
+const easymidi = require('easymidi');
+
+const app = express();
+const server = http.createServer(app);
+const wss = new WebSocket.Server({ server });
+
+// Obtener la lista de dispositivos MIDI disponibles
+function getMidiDevices() {
+    const devices = easymidi.getOutputs();
+    return devices.map(name => ({ name }));
+}
+
+// Ruta para obtener la lista de dispositivos MIDI
+app.get('/midi-devices', (req, res) => {
+    const devices = getMidiDevices();
+    res.json(devices);
+});
+
+// Conexiones WebSocket
+wss.on('connection', (ws) => {
+    console.log('Cliente WebSocket conectado');
+
+    // Manejo de mensajes desde el navegador
+    ws.on('message', (message) => {
+        console.log(`Mensaje recibido del navegador: ${message}`);
+
+        // Analizar el mensaje JSON
+        const data = JSON.parse(message);
+        const { ccNumber, ccValue, midiDevice } = data;
+
+        // Enviar el mensaje MIDI CC al dispositivo seleccionado
+        sendMidiCC(ccNumber, ccValue, midiDevice);
+    });
+});
+
+// Función para enviar un mensaje MIDI CC
+function sendMidiCC(ccNumber, ccValue, midiDevice) {
+    const output = new easymidi.Output(midiDevice);
+
+    // Enviar el mensaje MIDI CC
+    output.send('cc', {
+        controller: ccNumber,
+        value: ccValue,
+        channel: 0, // Canal MIDI (cambia si es necesario)
+    });
+
+    // Cerrar la conexión MIDI después de enviar el mensaje
+    output.close();
+
+    console.log(`Enviando CC ${ccNumber} a ${midiDevice}: ${ccValue}`);
+}
+
+// Iniciar el servidor en el puerto 3000
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+    console.log(`Servidor Node.js escuchando en el puerto ${PORT}`);
+});
+
+#########################################################################################################################
+Asegúrate de que este archivo (app.js) esté en el mismo directorio que tu archivo HTML (index.html). Luego, ejecuta el servidor Node.js con node app.js, y podrás acceder a la página HTML en tu navegador. Este ejemplo permite seleccionar un dispositivo MIDI de salida, ingresar el número de CC y su valor, y luego enviarlo a través de WebSocket al servidor Node.js, que lo enviará al dispositivo MIDI seleccionado.
+
