@@ -1,0 +1,45 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: black;
+}
+
+canvas {
+    max-width: 100%;
+    border: 1px solid white;
+    transition: border-color 0.3s ease-in-out; /* Transición para el borde del lienzo */
+}
+
+/* Estilos para la serpiente */
+.green {
+    background-color: green;
+    transition: background-color 0.2s ease-in-out; /* Transición de color */
+}
+
+.lightgreen {
+    background-color: lightgreen;
+    transition: background-color 0.2s ease-in-out; /* Transición de color */
+}
+
+/* Estilos para la comida */
+.red {
+    background-color: red;
+    transition: background-color 0.2s ease-in-out; /* Transición de color */
+}
+
+/* Efecto de parpadeo cuando la comida se come */
+.blink {
+    animation: blink 0.5s alternate infinite;
+}
+
+@keyframes blink {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
