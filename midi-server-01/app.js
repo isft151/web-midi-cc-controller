@@ -7,8 +7,10 @@ const fs = require('fs');
 const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
+console.log(easymidi.getInputs());
+const midiInputs = easymidi.getInputs();
 
-const midiDevice = 'Client-128:Virtual RawMIDI 128:0';
+const midiDevice = midiInputs[0];
 
 // TODO HAY QUE PENSAR COMO ENVIAR ESTO UNA SOLA VEZ
 const midiOutput = new easymidi.Output(midiDevice);
